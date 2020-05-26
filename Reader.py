@@ -56,6 +56,8 @@ while continue_reading:
 
         uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
         print "UID invertido en HEX: ", uid3
+
+        uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         sleep (3)
 
         # This is the default key for authentication
