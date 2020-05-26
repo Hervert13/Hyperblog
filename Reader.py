@@ -49,8 +49,13 @@ while continue_reading:
         print "Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
         print "invirtiendo el sentido del UID"
         uid2 = []
+        uid3 = []
+
         uid2 = (uid[3], uid[2], uid[1], uid[0])
         print "UID invertido: ", uid2
+
+        uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
+        print "UID invertido en HEX: ", uid2
         sleep (3)
 
         # This is the default key for authentication
