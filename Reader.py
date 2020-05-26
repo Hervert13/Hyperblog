@@ -50,7 +50,7 @@ while continue_reading:
         print "invirtiendo el sentido del UID"
         uid2 = []
         uid2 = (uid[3], uid[2], uid[1], uid[0])
-        print ("UID invertido: ", uid2)
+        print "UID invertido: ", uid2
         sleep (3)
 
         # This is the default key for authentication
