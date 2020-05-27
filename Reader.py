@@ -58,26 +58,27 @@ while continue_reading:
         print "UID invertido en HEX: ", uid3
 
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
+
         sleep (3)
+        print "UUID en la BD debe ser: ", uuidHEX
 
-        # This is the default key for authentication
-        key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
-
-
-        # Select the scanned tag
-        MIFAREReader.MFRC522_SelectTag(uid)
-
-
-        # Authenticate
-        status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
-
-#        print("pause")
-#        sleep(5)
-
-
-        # Check if authenticated
-        if status == MIFAREReader.MI_OK:
-            MIFAREReader.MFRC522_Read(11)
-            MIFAREReader.MFRC522_StopCrypto1()
-        else:
-            print "Authentication error"
+#         # This is the default key for authentication
+#         key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+#
+#         # Select the scanned tag
+#         MIFAREReader.MFRC522_SelectTag(uid)
+#
+#
+#         # Authenticate
+#         status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+#
+# #        print("pause")
+# #        sleep(5)
+#
+#
+#         # Check if authenticated
+#         if status == MIFAREReader.MI_OK:
+#             MIFAREReader.MFRC522_Read(11)
+#             MIFAREReader.MFRC522_StopCrypto1()
+#         else:
+#             print "Authentication error"
