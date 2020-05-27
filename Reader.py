@@ -58,9 +58,10 @@ while continue_reading:
         print "UID invertido en HEX: ", uid3
 
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
+        uuidDEC = int(uuidHEX, 16)
 
         sleep (3)
-        print "UUID en la BD debe ser: ", uuidHEX
+        print "UUID en la BD debe ser: ", uuidDEC
 
 #         # This is the default key for authentication
 #         key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
