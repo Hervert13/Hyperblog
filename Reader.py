@@ -57,10 +57,16 @@ while continue_reading:
         uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
         print "UID invertido en HEX: ", uid3
 
-
+        n = 0
         for i in uid3:
             print (i)
+            if len(i) < 2:
+                uid3[n] = (str(0) + str(i))
+                print (".......digito exadecimal corregido", uid3[n])
 
+
+            n= n + 1
+        print ("los HEX completos son: ",  uid3)
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         uuidDEC = int(uuidHEX, 16)
 
