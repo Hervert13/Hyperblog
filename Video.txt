@@ -1,0 +1,5 @@
+gource -s .5 -f -a 1 --max-files 15000  --highlight-users --bloom-intensity 1.2 --transparent  -hide filenames,progress --title "Raspberry lector" --camera-mode overview --file-idle-time 0 --key --auto-skip-seconds 1
+
+gource -s .5 -a 1 --max-files 15000  --highlight-users --bloom-intensity 1.2 --transparent  -hide filenames,progress --title "Raspberry lector" --camera-mode overview --file-idle-time 0 --key --auto-skip-seconds 1
+
+
