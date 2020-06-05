@@ -30,7 +30,6 @@ def end_read(signal,frame):
 
 continue_reading    = True
 MAC                 = getMAC()
-print ("identificador de puerta: " + MAC)
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
@@ -66,14 +65,14 @@ while continue_reading:
 
         n = 0
         for i in uid3:
-            print (i)
+#            print (i)
             if len(i) < 2:
                 uid3[n] = (str(0) + str(i))
                 # print (".......digito exadecimal corregido", uid3[n])
 
 
             n= n + 1
-        print ("los HEX completos son: ",  uid3)
+#        print ("los HEX completos son: ",  uid3)
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         uuidDEC = int(uuidHEX, 16)
 
@@ -81,12 +80,8 @@ while continue_reading:
         
         
         qryResult = qryConsultRFID(str(uuidDEC))
-<<<<<<< HEAD
+        
         sleep (.3)
-=======
-        sleep (.5)
-#    print(" ")
->>>>>>> 4bbc2d7341afe9cae98f2d31e16478f47b136079
 
 
 #         # This is the default key for authentication
