@@ -80,7 +80,12 @@ while continue_reading:
         
         
         qryResult = qryConsultRFID(str(uuidDEC))
+<<<<<<< HEAD
         sleep (.3)
+=======
+        sleep (.5)
+#    print(" ")
+>>>>>>> 4bbc2d7341afe9cae98f2d31e16478f47b136079
 
 
 #         # This is the default key for authentication
