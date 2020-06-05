@@ -30,6 +30,7 @@ def end_read(signal,frame):
 
 continue_reading    = True
 MAC                 = getMAC()
+print ("identificador de puerta: " + MAC)
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
