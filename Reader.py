@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 from time import sleep
-
+from MAC.GetMAC import getMAC
 from ODBC.conexionDB import MSSQL 
 from querys.premisys.DML import getQryPeople
 
@@ -19,7 +19,6 @@ def qryConsultRFID(cardNumber):
     print(qryResult)
     return qryResult
 
-continue_reading = True
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
@@ -27,6 +26,10 @@ def end_read(signal,frame):
     print ("Ctrl+C captured, ending read.")
     continue_reading = False
     GPIO.cleanup()
+
+
+continue_reading    = True
+MAC                 = getMAC()
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
@@ -54,18 +57,18 @@ while continue_reading:
     if status == MIFAREReader.MI_OK:
 
         # Print UID
-        print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
-        print ("invirtiendo el sentido del UID")
+        # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
+        # print ("invirtiendo el sentido del UID")
         uid3 = []
         uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
-        print ("UID invertido en HEX: ", uid3)
+        # print ("UID invertido en HEX: ", uid3)
 
         n = 0
         for i in uid3:
             print (i)
             if len(i) < 2:
                 uid3[n] = (str(0) + str(i))
-                print (".......digito exadecimal corregido", uid3[n])
+                # print (".......digito exadecimal corregido", uid3[n])
 
 
             n= n + 1
@@ -77,8 +80,7 @@ while continue_reading:
         
         
         qryResult = qryConsultRFID(str(uuidDEC))
-        sleep (.5)
-    print(" ")
+        sleep (.3)
 
 
 #         # This is the default key for authentication
