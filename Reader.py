@@ -10,13 +10,21 @@ import MFRC522
 import signal
 from time import sleep
 
+from ODBC.conexionDB import MSSQL 
+from querys.premisys.DML import getQryPeople
+
+def qryConsultRFID(cardNumber): 
+    conn = MSSQL()
+    qryResult = getQryPeople(conn, cardNumber)
+    print(qryResult)
+    return qryResult
 
 continue_reading = True
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
     global continue_reading
-    print "Ctrl+C captured, ending read."
+    print ("Ctrl+C captured, ending read.")
     continue_reading = False
     GPIO.cleanup()
 
@@ -27,7 +35,7 @@ signal.signal(signal.SIGINT, end_read)
 MIFAREReader = MFRC522.MFRC522()
 
 # Welcome message
-print "Welcome to the MFRC522 data read example"
+print ("Welcome to the MFRC522 data read example")
 
 # This loop keeps checking for chips. If one is near it will get the UID and authenticate
 while continue_reading:
@@ -37,7 +45,7 @@ while continue_reading:
 
     # If a card is found
     if status == MIFAREReader.MI_OK:
-        print "Card detected"
+        print ("Card detected")
 
     # Get the UID of the card
     (status,uid) = MIFAREReader.MFRC522_Anticoll()
@@ -46,16 +54,11 @@ while continue_reading:
     if status == MIFAREReader.MI_OK:
 
         # Print UID
-        print "Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
-        print "invirtiendo el sentido del UID"
-        uid2 = []
+        print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
+        print ("invirtiendo el sentido del UID")
         uid3 = []
-
-        uid2 = (uid[3], uid[2], uid[1], uid[0])
-        print "UID invertido: ", uid2
-
         uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
-        print "UID invertido en HEX: ", uid3
+        print ("UID invertido en HEX: ", uid3)
 
         n = 0
         for i in uid3:
@@ -70,14 +73,12 @@ while continue_reading:
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         uuidDEC = int(uuidHEX, 16)
 
-        print "UUID en la BD debe ser: ", uuidDEC
-        sleep (3)
-	print ("""
-
-
-
-	""")
-
+        print ("UUID en la BD debe ser: ", uuidDEC)
+        
+        
+        qryResult = qryConsultRFID(str(uuidDEC))
+        sleep (.5)
+    print(" ")
 
 
 #         # This is the default key for authentication
