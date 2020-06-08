@@ -4,17 +4,14 @@ import pymssql
 
 def getQryPeople(conn,cardNumber):
     try:
-   
-        
-        cursor = conn.cursor()
-        
+        cursor = conn.cursor()     
         QUERY = ("""                        
             SELECT CH.FirstName + ' ' + CH.LastName as cardHolderName ,  CH.EmployeeNumber as employeeNumber ,  CHC.card_number as cardNumber FROM Cardholder_Card AS CHC
             INNER JOIN Cardholders AS CH
                 ON (CHC.CardHolder_ID = CH.cardholder_id)
             where CHC.card_number = '"""+ cardNumber + """'
             """)
-        print(QUERY)
+#        print(QUERY)
         cursor.execute(QUERY)
         EMPLOYEE = []
         NOMBRE = []
@@ -29,9 +26,9 @@ def getQryPeople(conn,cardNumber):
             DATA.append(row[1])
             DATA.append(row[2])
             EMPLOYEE.append(DATA)
+        conn.close() 
         return EMPLOYEE
 
     except :
-        print("entre al ereror")
-#        conn.close()
- 
+        print("El Query no funciono")
+#        conn.close() 
