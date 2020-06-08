@@ -30,5 +30,5 @@ def getQryPeople(conn,cardNumber):
 
     except :
         print("entre al ereror")
-        conn.close()
+#        conn.close()
  
