@@ -88,6 +88,7 @@ while continue_reading:
 
 
 
+
 #         # This is the default key for authentication
 #         key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
 #
