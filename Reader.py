@@ -10,8 +10,28 @@ import MFRC522
 import signal
 from time import sleep
 from MAC.GetMAC import getMAC
-from ODBC.conexionDB import MSSQL 
+# from ODBC.conexionDB import MSSQL 
 from querys.premisys.DML import getQryPeople
+
+
+import pymssql
+
+
+server = ("172.16.100.226:1433")
+user = ("empleados_consulta")
+password = ("Sisamex.#2020")
+
+
+
+def MSSQL():
+#    try:
+        print("intentando entrar al MSSQL")
+        conn = pymssql.connect(server, user, password, "CardHolders")
+        return conn
+ #   except:
+        print("no se conecto a MSSQL")
+
+
 
 def qryConsultRFID(cardNumber): 
     conn = MSSQL()
