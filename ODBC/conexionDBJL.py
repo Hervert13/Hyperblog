@@ -1,8 +1,6 @@
 import pymssql
 import psycopg2
 import datetime
-import time
-
 
 
 
@@ -27,7 +25,7 @@ def insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId):
         conn   = psycopg2.connect(config)
         cursor = conn.cursor()
 
-        fecha   = datetime.now
+        fecha   = str(datetime.datetime.now())
         data  = [cardNumber, employeeNumber, cardHolderName, fecha, fecha, fecha, doorId]
 
         insert_stmt = (
@@ -50,13 +48,15 @@ def get_doorId(MAC):
         conn   = psycopg2.connect(config)
         cursor = conn.cursor()
 
-        SELECT_V = ("""SELECT id FROM public."meraki_door_name" WHERE (macAddress = \'""" + MAC + """\' );""")
+        SELECT_V = ("""SELECT id FROM public.meraki_door_name WHERE ("macAddress" = \'""" + MAC + """\' );""")
         SELECT = (str(SELECT_V))
         cursor.execute(SELECT)
         doorId = cursor.fetchall()
 
         conn.close()
         return (doorId[0][0])
+    except:
+        print("no se pudo traer el numero de puerta ")
         
         
 

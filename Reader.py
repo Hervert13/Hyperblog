@@ -81,17 +81,11 @@ while continue_reading:
         qryResult = qryConsultRFID(str(uuidDEC))
         cardNumber = str(qryResult[1][2])
         employeeNumber = str(qryResult[1][1])
+        if employeeNumber == "None":
+            employeeNumber = " "
         cardHolderName = str(qryResult[1][0])
         insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
         
-        sleep (.3)
-
-
-
-
-
-
-
 #         # This is the default key for authentication
 #         key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
 #
