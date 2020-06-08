@@ -10,11 +10,8 @@ import MFRC522
 import signal
 from time import sleep
 from MAC.GetMAC import getMAC
-from ODBC.conexionDBJL import MSSQL 
+from ODBC.conexionDBJL import MSSQL, get_doorId, insert_transactions
 from querys.premisys.DML import getQryPeople
-
-
-
 
 
 def qryConsultRFID(cardNumber): 
@@ -34,6 +31,7 @@ def end_read(signal,frame):
 
 continue_reading    = True
 MAC                 = getMAC()
+doorId              = get_doorId(MAC)
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
@@ -73,17 +71,18 @@ while continue_reading:
             if len(i) < 2:
                 uid3[n] = (str(0) + str(i))
                 # print (".......digito exadecimal corregido", uid3[n])
-
-
             n= n + 1
 #        print ("los HEX completos son: ",  uid3)
+
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         uuidDEC = int(uuidHEX, 16)
-
-        print ("UUID en la BD debe ser: ", uuidDEC)
-        
+#        print ("UUID en la BD debe ser: ", uuidDEC)
         
         qryResult = qryConsultRFID(str(uuidDEC))
+        cardNumber = str(qryResult[1][2])
+        employeeNumber = str(qryResult[1][1])
+        cardHolderName = str(qryResult[1][0])
+        insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
         
         sleep (.3)
 

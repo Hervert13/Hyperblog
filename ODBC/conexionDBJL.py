@@ -43,7 +43,22 @@ def insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId):
 
 
 
+def get_doorId(MAC):
+    try:
+        server_postgres        = ["172.16.100.219","5432","smx_meraki","smxdba","Metallica.2017"]
+        config = "host= "+ server_postgres[0] + " port="+ server_postgres[1]+  " dbname="+server_postgres[2]+ " user="+server_postgres[3]+ " password="+server_postgres[4]
+        conn   = psycopg2.connect(config)
+        cursor = conn.cursor()
 
+        SELECT_V = ("""SELECT id FROM public."meraki_door_name" WHERE (macAddress = \'""" + MAC + """\' );""")
+        SELECT = (str(SELECT_V))
+        cursor.execute(SELECT)
+        doorId = cursor.fetchall()
+
+        conn.close()
+        return (doorId[0][0])
+        
+        
 
 # def MSSQL():
 #  #   try:
