@@ -1,4 +1,7 @@
 import pyodbc
+from os import getenv
+import pymssql
+
 def getQryPeople(conn,cardNumber):
     try:
    
