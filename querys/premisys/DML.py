@@ -1,4 +1,4 @@
-import pyodbc
+#import pyodbc
 from os import getenv
 import pymssql
 

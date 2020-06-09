@@ -36,6 +36,7 @@ def end_read(signal,frame):
 
 continue_reading    = True
 MAC                 = getMAC()
+print (MAC)
 doorId              = get_doorId(MAC)
 
 # Hook the SIGINT
