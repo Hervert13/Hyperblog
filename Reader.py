@@ -58,12 +58,11 @@ while continue_reading:
     # If we have the UID, continue
     if status == MIFAREReader.MI_OK:
 
-        # Print UID
-        # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
-        # print ("invirtiendo el sentido del UID")
+        print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
+        print ("invirtiendo el sentido del UID")
         uid3 = []
         uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
-        # print ("UID invertido en HEX: ", uid3)
+        print ("UID invertido en HEX: ", uid3)
 
         n = 0
         for i in uid3:
@@ -76,7 +75,7 @@ while continue_reading:
 
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         uuidDEC = int(uuidHEX, 16)
-#        print ("UUID en la BD debe ser: ", uuidDEC)
+        print ("UUID en la BD debe ser: ", uuidDEC)
         
         qryResult = qryConsultRFID(str(uuidDEC))
         cardNumber = str(qryResult[1][2])
