@@ -84,11 +84,16 @@ while continue_reading:
         # print ("UUID en la BD debe ser: ", uuidDEC)
         
         qryResult = qryConsultRFID(str(uuidDEC))
-        cardNumber = str(qryResult[1][2])
-        employeeNumber = str(qryResult[1][1])
-        if employeeNumber == "None":
-            employeeNumber = " "
-        cardHolderName = str(qryResult[1][0])
+        try:
+            cardNumber = str(qryResult[1][2])
+            employeeNumber = str(qryResult[1][1])
+            if employeeNumber == "None":
+                employeeNumber = " "
+            cardHolderName = str(qryResult[1][0])
+        
+        except:
+            print("no se encontró tarjeta en premisis")
+        
         insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
         fecha   = str(datetime.datetime.now()) 
         print(fecha, employeeNumber, cardHolderName)
