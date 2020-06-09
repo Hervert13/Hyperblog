@@ -12,6 +12,11 @@ from time import sleep
 from MAC.GetMAC import getMAC
 from ODBC.conexionDBJL import MSSQL, get_doorId, insert_transactions
 from querys.premisys.DML import getQryPeople
+import datetime
+
+
+
+
 
 
 def qryConsultRFID(cardNumber): 
@@ -58,11 +63,11 @@ while continue_reading:
     # If we have the UID, continue
     if status == MIFAREReader.MI_OK:
 
-        print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
-        print ("invirtiendo el sentido del UID")
+        # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
+        # print ("invirtiendo el sentido del UID")
         uid3 = []
         uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
-        print ("UID invertido en HEX: ", uid3)
+        # print ("UID invertido en HEX: ", uid3)
 
         n = 0
         for i in uid3:
@@ -75,7 +80,7 @@ while continue_reading:
 
         uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
         uuidDEC = int(uuidHEX, 16)
-        print ("UUID en la BD debe ser: ", uuidDEC)
+        # print ("UUID en la BD debe ser: ", uuidDEC)
         
         qryResult = qryConsultRFID(str(uuidDEC))
         cardNumber = str(qryResult[1][2])
@@ -84,24 +89,5 @@ while continue_reading:
             employeeNumber = " "
         cardHolderName = str(qryResult[1][0])
         insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
-        
-#         # This is the default key for authentication
-#         key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
-#
-#         # Select the scanned tag
-#         MIFAREReader.MFRC522_SelectTag(uid)
-#
-#
-#         # Authenticate
-#         status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
-#
-# #        print("pause")
-# #        sleep(5)
-#
-#
-#         # Check if authenticated
-#         if status == MIFAREReader.MI_OK:
-#             MIFAREReader.MFRC522_Read(11)
-#             MIFAREReader.MFRC522_StopCrypto1()
-#         else:
-#             print "Authentication error"
+        fecha   = str(datetime.datetime.now()) 
+        print(fecha, employeeNumber, cardHolderName)
