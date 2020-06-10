@@ -55,8 +55,8 @@ while continue_reading:
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
     
         # If a card is found
-        if status == MIFAREReader.MI_OK:
-            print ("Card detected")
+        # if status == MIFAREReader.MI_OK:
+        #     print ("Card detected")
     
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
@@ -96,7 +96,7 @@ while continue_reading:
                 
             insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
-            print(fecha, employeeNumber, cardHolderName)
+            print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
     except:
             print("Error" )
