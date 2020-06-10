@@ -92,7 +92,8 @@ while continue_reading:
                 cardHolderName = str(qryResult[1][0])
             
             except:
-                print("no se encontró tarjeta en premisis")
+                fecha   = str(datetime.datetime.now())
+                print(fecha, "no se encontró tarjeta en premisis", uuidDEC)
                 
             insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
