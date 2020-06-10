@@ -15,6 +15,10 @@ from querys.premisys.DML import getQryPeople
 import datetime
 
 
+
+
+
+
 def qryConsultRFID(cardNumber): 
     conn = MSSQL()
     qryResult = getQryPeople(conn, cardNumber)
@@ -46,7 +50,7 @@ print ("Welcome to the MFRC522 data read example")
 
 # This loop keeps checking for chips. If one is near it will get the UID and authenticate
 while continue_reading:
-   # try:
+#    try:
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
     
@@ -88,11 +92,12 @@ while continue_reading:
                 cardHolderName = str(qryResult[1][0])
             
             except:
-                print("no se encontró tarjeta en premisis")
+                fecha   = str(datetime.datetime.now())
+                print(fecha, "no se encontró tarjeta en premisis", uuidDEC)
                 
             insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
             print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
-    #except:
+#    except:
             print("Error" )
