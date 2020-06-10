@@ -98,5 +98,5 @@ while continue_reading:
             fecha   = str(datetime.datetime.now())
             print(fecha, employeeNumber, cardHolderName)
             sleep(1.5)
-        except:
+    except:
             print("Error" )
