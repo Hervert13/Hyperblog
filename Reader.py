@@ -93,7 +93,8 @@ while continue_reading:
         
         except:
             print("no se encontró tarjeta en premisis")
-        
+            
         insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
-        fecha   = str(datetime.datetime.now()) 
+        fecha   = str(datetime.datetime.now())
         print(fecha, employeeNumber, cardHolderName)
+        sleep(1.5)
