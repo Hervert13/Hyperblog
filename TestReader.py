@@ -95,9 +95,9 @@ while continue_reading:
                 fecha   = str(datetime.datetime.now())
                 print(fecha, "no se encontró tarjeta en premisis", uuidDEC)
                 
-            insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
+#            insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
             print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
 #    except:
-            print("Error" )
+#            print("Error" )
