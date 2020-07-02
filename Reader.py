@@ -100,4 +100,5 @@ while continue_reading:
             print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
     except:
-            print("Error" )
+        fecha   = str(datetime.datetime.now())
+        print("Error", fecha, " ", uid)
