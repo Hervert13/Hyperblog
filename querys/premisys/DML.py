@@ -9,10 +9,10 @@ def getQryPeople(conn,cardNumber):
             SELECT CH.FirstName + ' ' + CH.LastName as cardHolderName ,  CH.EmployeeNumber as employeeNumber ,  CHC.card_number as cardNumber FROM Cardholder_Card AS CHC
             INNER JOIN Cardholders AS CH
                 ON (CHC.CardHolder_ID = CH.cardholder_id)
-            where CHC.card_number = '"""+ cardNumber + """'
+            where CHC.card_number = '"""+ str(cardNumber) + """'
             """)
 #        print(QUERY)
-        cursor.execute(QUERY)
+        cursor.execute(str(QUERY))
         EMPLOYEE = []
         NOMBRE = []
         DATA = []

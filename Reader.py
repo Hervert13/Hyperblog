@@ -23,6 +23,7 @@ def qryConsultRFID(cardNumber):
     conn = MSSQL()
     qryResult = getQryPeople(conn, cardNumber)
 #    print(qryResult)
+    print(qryResult)
     return qryResult
 
 
@@ -66,20 +67,33 @@ while continue_reading:
     
             # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
             # print ("invirtiendo el sentido del UID")
+            uid = uid[0:4]
+            uid2 = []
             uid3 = []
-            uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
+            uid.reverse()
+            uid2 = uid
+            for i in uid2:
+                print(i)
+                uid3.append(hex(i).split('x')[-1])
+
+
+#            uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
             # print ("UID invertido en HEX: ", uid3)
-    
+            uuidHEX = 0 
             n = 0
             for i in uid3:
-    #            print (i)
+                print (i)
                 if len(i) < 2:
                     uid3[n] = (str(0) + str(i))
+                if n == 0:
+                    uuidHEX = uid3[n]
+                else:
+                    uuidHEX = str(uuidHEX) + str(uid3[n]) 
                     # print (".......digito exadecimal corregido", uid3[n])
+    #            uuidHEX.append(str(uid3[n]))
                 n= n + 1
     #        print ("los HEX completos son: ",  uid3)
-    
-            uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
+
             uuidDEC = int(uuidHEX, 16)
             # print ("UUID en la BD debe ser: ", uuidDEC)
             
