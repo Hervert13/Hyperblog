@@ -23,7 +23,6 @@ def qryConsultRFID(cardNumber):
     conn = MSSQL()
     qryResult = getQryPeople(conn, cardNumber)
 #    print(qryResult)
-    print(qryResult)
     return qryResult
 
 
@@ -73,7 +72,7 @@ while continue_reading:
             uid.reverse()
             uid2 = uid
             for i in uid2:
-                print(i)
+     #           print(i)
                 uid3.append(hex(i).split('x')[-1])
 
 
@@ -82,7 +81,7 @@ while continue_reading:
             uuidHEX = 0 
             n = 0
             for i in uid3:
-                print (i)
+  #              print (i)
                 if len(i) < 2:
                     uid3[n] = (str(0) + str(i))
                 if n == 0:
