@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 23 16:05:32 2020
+
+@author: pi
+"""
+#import socket
+#s=socket.socket(socket.AF_INET,socket.SOCK_STREAM) (IPV04,TCP)
+# socket.AF_INET6 para IPVo6
+# socket.SOCK_dgRAM para UDP
+
+#Servidor:
+#s.bind((ip, #puerto))   #s.bind(("192.168.1.8",3019))
+#s.listen(#conexiones) #s.listen(4) cuantas conexiones puede soportar el servidor
+#s.accept() #(sc,addrC) = s.accept()  Crea un socket para el cliente cuando se conecta el clinete y la dirección ip del clinete
+
+#Cliente:
+
+#s.connect((ipS,#puerto))     #s.connect(("192.168.1.8",3019)))
+
+#otros:
+ 
+#s.recv() para recibir información en TCP    #s.recv(64) poner los bytes para el tamaño de datos que vamos a recibir
+#s.send() para enviar información en TCP     #s.send("Hola")
+
+#s.recvfrom() para recibir información en UDP
+#s.sendto() para enviar información en UDP
+
+
+import socket
+s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.bind(("172.28.27.28",2019))
+s.listen(5)
+(sc, addrC) = s.accept()
+print("Ip del cliente:",addrC)
+while True:
+    mensaje = sc.recv(64)
+    print("Mensaje:", mensaje)
+    sc.send("Mensaje Recibido")
+print("Fin de programa")
+sc.close()
+s.close()

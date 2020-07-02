@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 23 13:52:35 2020
+
+@author: pi
+"""
+
+#a = int(input("Digite el numero 1: "))
+#b = int(input("Digite el numero 2: "))
+#print("La suma es:",a+b)
+
+a = int(input("Digite un numero: "))
+s = a*(a+1)/2
+print("La suma de los numeros es:",int(s))
