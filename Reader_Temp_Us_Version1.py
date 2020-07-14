@@ -1,16 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
 """
-Created on Wed Jun 24 12:32:11 2020
-
-Proyect Estacion de medicion de temperaruta corporal contra COVID-19
-
-@author: pi Carlos Hervert
+Lector y decodificador de ids
 """
-
 
 import RPi.GPIO as GPIO
-import time
 import MFRC522
 import signal
 from time import sleep
@@ -18,6 +13,8 @@ from MAC.GetMAC import getMAC
 from ODBC.conexionDBJL import MSSQL, get_doorId, insert_transactions
 from querys.premisys.DML import getQryPeople
 import datetime
+import time
+
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(3,GPIO.OUT)   #2 Salida Us
@@ -28,29 +25,29 @@ GPIO.setup(7,GPIO.OUT)   #4 Salida Foco Verde
 GPIO.setup(35,GPIO.IN)   #19 Entrada Rojo
 GPIO.setup(33,GPIO.OUT)  #13 Salida Foco Rojo
 
-GPIO.output(3,GPIO.LOW)
+GPIO.output(3,GPIO.LOW)  #Señal de trigger para el Us
 
 
-#def qryConsultRFID(cardNumber): 
-#    conn = MSSQL()
-#    qryResult = getQryPeople(conn, cardNumber)
-##    print(qryResult)
-#    return qryResult
+
+def qryConsultRFID(cardNumber): 
+    conn = MSSQL()
+    qryResult = getQryPeople(conn, cardNumber)
+#    print(qryResult)
+    return qryResult
 
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
-    global continue_reading, Read_Us
+    global continue_reading
     print ("Ctrl+C captured, ending read.")
     continue_reading = False
     GPIO.cleanup()
 
-
-continue_reading    = True
 Read_Us             = False
+continue_reading    = True
 MAC                 = getMAC()
 print (MAC)
-#doorId              = get_doorId(MAC)
+doorId              = get_doorId(MAC)
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
@@ -65,20 +62,22 @@ print ("Welcome to the MFRC522 data read example")
 while continue_reading:
     GPIO.output(7,GPIO.LOW)
     GPIO.output(33,GPIO.LOW)
+    
     try:
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
-    
+
         # If a card is found
-        #if status == MIFAREReader.MI_OK:
-         #    print ("Card detected")
+        # if status == MIFAREReader.MI_OK:
+        #     print ("Card detected")
     
         # Get the UID of the card
         (status,uid) = MIFAREReader.MFRC522_Anticoll()
     
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
-            Read_Us = True
+            print ("Prueba: ", status)
+            Read_Us = True 
     
             # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
             # print ("invirtiendo el sentido del UID")
@@ -97,24 +96,23 @@ while continue_reading:
     
             uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
             uuidDEC = int(uuidHEX, 16)
-            print ("UUID en Hexadecimal es: ", uuidHEX)
-            print ("UUID en la BD debe ser: ", uuidDEC)
+            # print ("UUID en la BD debe ser: ", uuidDEC)
             
-# #           qryResult = qryConsultRFID(str(uuidDEC))
-#            try:
-#                cardNumber = str(qryResult[1][2])
-#                employeeNumber = str(qryResult[1][1])
-#                if employeeNumber == "None":
-#                    employeeNumber = " "
-#                cardHolderName = str(qryResult[1][0])
+            qryResult = qryConsultRFID(str(uuidDEC))
+            try:
+                cardNumber = str(qryResult[1][2])
+                employeeNumber = str(qryResult[1][1])
+                if employeeNumber == "None":
+                    employeeNumber = " "
+                cardHolderName = str(qryResult[1][0])
             
-#            except:
-            fecha   = str(datetime.datetime.now())
-            print(fecha, "no se encontró tarjeta en premisis")#, uuidDEC)
+            except:
+                fecha   = str(datetime.datetime.now())
+                print(fecha, "No se encontró tarjeta en premisis", uuidDEC)
                 
-#            insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
+            insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
-#            print("Card detected ", fecha, employeeNumber, cardHolderName)
+            print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
             
         while Read_Us:
@@ -152,7 +150,7 @@ while continue_reading:
                 GPIO.output(13,GPIO.LOW)
                 print("Valor de Verde: ",GPIO.input(37))
                 Read_Us = False
-                continue_reading    = True
+                #continue_reading    = True
                 # 1 = Temperatura bien
                 # 0 = Temperatura mal
             else:
@@ -168,14 +166,9 @@ while continue_reading:
                 GPIO.output(13,GPIO.LOW)
                 print("Valor de Rojo: ",GPIO.input(35))
                 Read_Us = False
-                continue_reading    = True
+                #continue_reading    = True
             else:
-                GPIO.output(33,GPIO.LOW)
-            
+                GPIO.output(33,GPIO.LOW)            
             
     except:
             print("Error" )
-
-
-
-        

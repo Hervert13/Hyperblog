@@ -24,7 +24,7 @@ def qryConsultRFID(cardNumber):
     qryResult = getQryPeople(conn, cardNumber)
 #    print(qryResult)
     return qryResult
-ms
+
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
