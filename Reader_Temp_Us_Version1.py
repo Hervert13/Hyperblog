@@ -62,7 +62,7 @@ print ("Welcome to the MFRC522 data read example")
 while continue_reading:
     GPIO.output(7,GPIO.LOW)
     GPIO.output(33,GPIO.LOW)
-
+    
     try:
         # Scan for cards
         (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
@@ -76,7 +76,6 @@ while continue_reading:
 
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
-            print ("Prueba: ", status)
             Read_Us = True
 
             # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
@@ -110,12 +109,12 @@ while continue_reading:
                 fecha   = str(datetime.datetime.now())
                 print(fecha, "No se encontró tarjeta en premisis", uuidDEC)
 
-            insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
+    #        insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
             print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
 
-            while Read_Us:
+            while Read_Us == True:
                 GPIO.output(3,GPIO.HIGH)
                 time.sleep(0.00001)    #Para mandar pulso de 10ms
                 GPIO.output(3,GPIO.LOW)
@@ -155,7 +154,7 @@ while continue_reading:
                     # 0 = Temperatura mal
                 else:
                     GPIO.output(7,GPIO.LOW)
-                    
+
 
                 if (GPIO.input(35) == True and GPIO.input(37) == False):      #Se activa foco Rojo
 
@@ -169,6 +168,10 @@ while continue_reading:
                     #continue_reading    = True
                 else:
                     GPIO.output(33,GPIO.LOW)
+                
+                signal.signal(signal.SIGINT, end_read)
+                MIFAREReader = MFRC522.MFRC522()
+
 
     except:
             print("Error" )
