@@ -62,6 +62,7 @@ print ("Welcome to the MFRC522 data read example")
 while continue_reading:
     GPIO.output(7,GPIO.LOW)
     GPIO.output(33,GPIO.LOW)
+<<<<<<< HEAD
     #
     # try:
         # Scan for cards
@@ -140,6 +141,118 @@ while continue_reading:
                     time.sleep(1.5)
                 else:
                     GPIO.output(13,GPIO.LOW)
+=======
+    
+    try:
+        # Scan for cards
+        (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+
+        # If a card is found
+        # if status == MIFAREReader.MI_OK:
+        #     print ("Card detected")
+
+        # Get the UID of the card
+        (status,uid) = MIFAREReader.MFRC522_Anticoll()
+
+        # If we have the UID, continue
+        if status == MIFAREReader.MI_OK:
+            Read_Us = True
+
+            # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
+            # print ("invirtiendo el sentido del UID")
+            uid3 = []
+            uid3 = (hex(uid[3]).split('x')[-1], hex(uid[2]).split('x')[-1], hex(uid[1]).split('x')[-1], hex(uid[0]).split('x')[-1])
+            # print ("UID invertido en HEX: ", uid3)
+
+            n = 0
+            for i in uid3:
+    #            print (i)
+                if len(i) < 2:
+                    uid3[n] = (str(0) + str(i))
+                    # print (".......digito exadecimal corregido", uid3[n])
+                n= n + 1
+    #        print ("los HEX completos son: ",  uid3)
+
+            uuidHEX = (str(uid3[0])+ str(uid3[1])+ str(uid3[2])+ str(uid3[3]))
+            uuidDEC = int(uuidHEX, 16)
+            # print ("UUID en la BD debe ser: ", uuidDEC)
+
+            qryResult = qryConsultRFID(str(uuidDEC))
+            try:
+                cardNumber = str(qryResult[1][2])
+                employeeNumber = str(qryResult[1][1])
+                if employeeNumber == "None":
+                    employeeNumber = " "
+                cardHolderName = str(qryResult[1][0])
+
+            except:
+                fecha   = str(datetime.datetime.now())
+                print(fecha, "No se encontró tarjeta en premisis", uuidDEC)
+
+    #        insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
+            fecha   = str(datetime.datetime.now())
+            print("Card detected ", fecha, employeeNumber, cardHolderName)
+            sleep(1.5)
+
+            while Read_Us == True:
+                GPIO.output(3,GPIO.HIGH)
+                time.sleep(0.00001)    #Para mandar pulso de 10ms
+                GPIO.output(3,GPIO.LOW)
+                time.time()            #Devuelve el numero de segundos desde que el rapsberry se encendio.
+                inicio = time.time()
+                while GPIO.input(38) == GPIO.LOW:
+                   inicio = time.time()
+                while GPIO.input(38) == GPIO.HIGH:
+                    fin = time.time()
+                rango = fin - inicio
+                #2d = rango*34000/s    #Para calcular la distancia, es 2 veces la distancia (ida y vuelta) se elimina los s con los time. 340 m/s ==> 34000/s.
+                d = rango*17000
+                print("Distancia: ",round(d,0),"cm")
+                time.sleep(0.2)
+
+                if d>15.0:                     #Condicional para mandar un solo pulso de medición
+                    Lejos = True
+                elif d<15.0:
+                    Cerca = True
+                    if (Lejos == True and Cerca == True):
+                        GPIO.output(13,GPIO.HIGH)
+                        time.sleep(1.5)
+                    else:
+                        GPIO.output(13,GPIO.LOW)
+
+                if (GPIO.input(37) == True):        #Se activa foco verde
+
+                    GPIO.output(7,GPIO.HIGH)
+                    time.sleep(3.5)
+                    Lejos = False
+                    Cerca = False
+                    GPIO.output(13,GPIO.LOW)
+                    print("Valor de Verde: ",GPIO.input(37))
+                    Read_Us = False
+                    #continue_reading    = True
+                    # 1 = Temperatura bien
+                    # 0 = Temperatura mal
+                else:
+                    GPIO.output(7,GPIO.LOW)
+
+
+                if (GPIO.input(35) == True and GPIO.input(37) == False):      #Se activa foco Rojo
+
+                    GPIO.output(33,GPIO.HIGH)
+                    time.sleep(3.5)
+                    Lejos = False
+                    Cerca = False
+                    GPIO.output(13,GPIO.LOW)
+                    print("Valor de Rojo: ",GPIO.input(35))
+                    Read_Us = False
+                    #continue_reading    = True
+                else:
+                    GPIO.output(33,GPIO.LOW)
+                
+                signal.signal(signal.SIGINT, end_read)
+                MIFAREReader = MFRC522.MFRC522()
+
+>>>>>>> b900f85556a105e02969a28716571ec8626427ae
 
             if (GPIO.input(37) == True):        #Se activa foco verde
 
