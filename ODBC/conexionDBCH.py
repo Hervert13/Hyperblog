@@ -18,7 +18,7 @@ def MSSQL():
 
 
 
-def insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId):
+def insert_transactions(cardNumber, employeeNumber, cardHolderName, estado_temperatura,doorId):
     try:
         server_postgres        = ["172.16.100.219","5432","smx_meraki","smxdba","Metallica.2017"]
         config = "host= "+ server_postgres[0] + " port="+ server_postgres[1]+  " dbname="+server_postgres[2]+ " user="+server_postgres[3]+ " password="+server_postgres[4]
@@ -26,18 +26,18 @@ def insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId):
         cursor = conn.cursor()
 
         fecha   = str(datetime.datetime.now())
-        data  = [cardNumber, employeeNumber, cardHolderName, fecha, fecha, fecha, doorId]
+        data  = [cardNumber, employeeNumber, cardHolderName, fecha, estado_temperatura, fecha, fecha, doorId]
 
         insert_stmt = (
-           """INSERT INTO public.meraki_transaction_header ("cardNumber", "employeeNumber", "cardHolderName", "transTime", fecha_creacion, fecha_modificacion, "doorName_id")"""
-           """VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+           """INSERT INTO public.meraki_transaction_header_pruebas ("cardNumber", "employeeNumber", "cardHolderName", "transTime", "estado_temperatura", fecha_creacion, fecha_modificacion, "doorName_id")"""
+           """VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
                   )
         cursor.execute(insert_stmt, data)
         conn.commit()
         conn.close()
 
     except:
-        print("NO SE ENCONTRo EL SERVIDOR postgres de transacciones meraki")
+        print("NO SE ENCONTRO EL SERVIDOR postgres de transacciones meraki")
 
 
 

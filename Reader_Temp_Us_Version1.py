@@ -10,7 +10,7 @@ import MFRC522
 import signal
 from time import sleep
 from MAC.GetMAC import getMAC
-from ODBC.conexionDBJL import MSSQL, get_doorId, insert_transactions
+from ODBC.conexionDBCH import MSSQL, get_doorId, insert_transactions
 from querys.premisys.DML import getQryPeople
 import datetime
 import time
@@ -19,11 +19,12 @@ import time
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(3,GPIO.OUT)   #2 Salida Us
 GPIO.setup(13,GPIO.OUT)  #27 Salida Activacion de Medida Termometro
-GPIO.setup(38,GPIO.IN)   #20 Entrada Ultrasonido
+GPIO.setup(8,GPIO.IN)   #20 Entrada Ultrasonido Echo
 GPIO.setup(37,GPIO.IN)   #26 Entrada Verde
 GPIO.setup(7,GPIO.OUT)   #4 Salida Foco Verde
 GPIO.setup(35,GPIO.IN)   #19 Entrada Rojo
-GPIO.setup(33,GPIO.OUT)  #13 Salida Foco Rojo
+GPIO.setup(11,GPIO.OUT)  #13 Salida Foco Rojo
+GPIO.setup(12,GPIO.OUT)  #13 Led de confirmacion de RFID
 
 GPIO.output(3,GPIO.LOW)  #Señal de trigger para el Us
 
@@ -60,8 +61,9 @@ print ("Welcome to the MFRC522 data read example")
 
 # This loop keeps checking for chips. If one is near it will get the UID and authenticate
 while continue_reading:
-    GPIO.output(7,GPIO.LOW)
-    GPIO.output(33,GPIO.LOW)
+    GPIO.output(7,GPIO.LOW)  #Apagar Salida Foco Verde
+    GPIO.output(11,GPIO.LOW) #Apagar Salida Foco Rojo
+    #GPIO.output(12,GPIO.LOW) #Apagar led de confirmación de RFID
     
     try:
         # Scan for cards
@@ -77,6 +79,7 @@ while continue_reading:
         # If we have the UID, continue
         if status == MIFAREReader.MI_OK:
             Read_Us = True
+            GPIO.output(12,GPIO.HIGH) #Enceder led de confirmacion de RFID
 
             # print ("Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3]))
             # print ("invirtiendo el sentido del UID")
@@ -109,26 +112,28 @@ while continue_reading:
                 fecha   = str(datetime.datetime.now())
                 print(fecha, "No se encontró tarjeta en premisis", uuidDEC)
 
-    #        insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
+            #insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
             print("Card detected ", fecha, employeeNumber, cardHolderName)
             sleep(1.5)
 
             while Read_Us == True:
+                #GPIO.output(12,GPIO.HIGH) #Enceder led de confirmacion de RFID
                 GPIO.output(3,GPIO.HIGH)
                 time.sleep(0.00001)    #Para mandar pulso de 10ms
                 GPIO.output(3,GPIO.LOW)
                 time.time()            #Devuelve el numero de segundos desde que el rapsberry se encendio.
                 inicio = time.time()
-                while GPIO.input(38) == GPIO.LOW:
+                while GPIO.input(8) == GPIO.LOW:
                    inicio = time.time()
-                while GPIO.input(38) == GPIO.HIGH:
+                while GPIO.input(8) == GPIO.HIGH:
                     fin = time.time()
                 rango = fin - inicio
                 #2d = rango*34000/s    #Para calcular la distancia, es 2 veces la distancia (ida y vuelta) se elimina los s con los time. 340 m/s ==> 34000/s.
                 d = rango*17000
                 print("Distancia: ",round(d,0),"cm")
                 time.sleep(0.2)
+                GPIO.output(12,GPIO.LOW) #Apagar led de confirmación de RFID
 
                 if d>15.0:                     #Condicional para mandar un solo pulso de medición
                     Lejos = True
@@ -149,25 +154,28 @@ while continue_reading:
                     GPIO.output(13,GPIO.LOW)
                     print("Valor de Verde: ",GPIO.input(37))
                     Read_Us = False
-                    #continue_reading    = True
-                    # 1 = Temperatura bien
-                    # 0 = Temperatura mal
+                    estado_temperatura = 1
+                    fecha   = str(datetime.datetime.now())
+                    insert_transactions(cardNumber, employeeNumber, cardHolderName, estado_temperatura, doorId)
+                    
                 else:
                     GPIO.output(7,GPIO.LOW)
 
 
                 if (GPIO.input(35) == True and GPIO.input(37) == False):      #Se activa foco Rojo
 
-                    GPIO.output(33,GPIO.HIGH)
+                    GPIO.output(11,GPIO.HIGH)
                     time.sleep(3.5)
                     Lejos = False
                     Cerca = False
                     GPIO.output(13,GPIO.LOW)
                     print("Valor de Rojo: ",GPIO.input(35))
                     Read_Us = False
-                    #continue_reading    = True
+                    estado_temperatura = 0
+                    insert_transactions(cardNumber, employeeNumber, cardHolderName, estado_temperatura, doorId)
+
                 else:
-                    GPIO.output(33,GPIO.LOW)
+                    GPIO.output(11,GPIO.LOW)
                 
                 signal.signal(signal.SIGINT, end_read)
                 MIFAREReader = MFRC522.MFRC522()
