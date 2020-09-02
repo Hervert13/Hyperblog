@@ -23,8 +23,9 @@ GPIO.setup(8,GPIO.IN)   #20 Entrada Ultrasonido Echo
 GPIO.setup(37,GPIO.IN)   #26 Entrada Verde
 GPIO.setup(7,GPIO.OUT)   #4 Salida Foco Verde
 GPIO.setup(35,GPIO.IN)   #19 Entrada Rojo
-GPIO.setup(11,GPIO.OUT)  #13 Salida Foco Rojo
+GPIO.setup(11,GPIO.OUT)  #33 Salida Foco Rojo
 GPIO.setup(12,GPIO.OUT)  #13 Led de confirmacion de RFID
+GPIO.setup(32,GPIO.OUT)  #led para pantalla
 
 GPIO.output(3,GPIO.LOW)  #Señal de trigger para el Us
 
@@ -59,11 +60,15 @@ MIFAREReader = MFRC522.MFRC522()
 # Welcome message
 print ("Welcome to the MFRC522 data read example")
 
-# This loop keeps checking for chips. If one is near it will get the UID and authenticate
+
+
+# This loop keeps checking for chips. If one is near it will get the UID and authenticate ++++++++++++++++++++++++++++++++++++++++++
 while continue_reading:
+
     GPIO.output(7,GPIO.LOW)  #Apagar Salida Foco Verde
     GPIO.output(11,GPIO.LOW) #Apagar Salida Foco Rojo
     #GPIO.output(12,GPIO.LOW) #Apagar led de confirmación de RFID
+
     
     try:
         # Scan for cards
@@ -115,7 +120,12 @@ while continue_reading:
             #insert_transactions(cardNumber, employeeNumber, cardHolderName, doorId)
             fecha   = str(datetime.datetime.now())
             print("Card detected ", fecha, employeeNumber, cardHolderName)
-            sleep(1.5)
+            sleep(1)
+            
+            
+            
+            
+            
 
             while Read_Us == True:
                 #GPIO.output(12,GPIO.HIGH) #Enceder led de confirmacion de RFID
@@ -141,6 +151,7 @@ while continue_reading:
                     Cerca = True
                     if (Lejos == True and Cerca == True):
                         GPIO.output(13,GPIO.HIGH)
+                        GPIO.output(32,GPIO.HIGH) #Activa led de pantalla
                         time.sleep(1.5)
                     else:
                         GPIO.output(13,GPIO.LOW)
@@ -177,9 +188,10 @@ while continue_reading:
                 else:
                     GPIO.output(11,GPIO.LOW)
                 
+                GPIO.output(32,GPIO.LOW) #apagar led de pantalla 
                 signal.signal(signal.SIGINT, end_read)
                 MIFAREReader = MFRC522.MFRC522()
 
 
     except:
-            print("Error" )
+            print("Error Reader" )
