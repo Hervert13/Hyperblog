@@ -51,7 +51,7 @@ while True:
     if (GPIO.input(26) == True):        #Se activa foco verde
         
         GPIO.output(4,GPIO.HIGH)
-        time.sleep(3.5)
+        time.sleep(2.5)
         Lejos = False
         Cerca = False
         GPIO.output(27,GPIO.LOW)
@@ -64,7 +64,7 @@ while True:
     if (GPIO.input(19) == True and GPIO.input(26) == False):      #Se activa foco Rojo
         
         GPIO.output(13,GPIO.HIGH)
-        time.sleep(3.5)
+        time.sleep(2.5)
         Lejos = False
         Cerca = False
         GPIO.output(27,GPIO.LOW)

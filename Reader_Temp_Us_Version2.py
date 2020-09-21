@@ -159,7 +159,7 @@ while continue_reading:
                 if (GPIO.input(37) == True):        #Se activa foco verde
 
                     GPIO.output(7,GPIO.HIGH)
-                    time.sleep(2.5)
+                    time.sleep(3.5)
                     Lejos = False
                     Cerca = False
                     GPIO.output(13,GPIO.LOW)
@@ -176,7 +176,7 @@ while continue_reading:
                 if (GPIO.input(35) == True and GPIO.input(37) == False):      #Se activa foco Rojo
 
                     GPIO.output(11,GPIO.HIGH)
-                    time.sleep(2.5)
+                    time.sleep(3.5)
                     Lejos = False
                     Cerca = False
                     GPIO.output(13,GPIO.LOW)
